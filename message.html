@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Board - SHSSS Headlines</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            color: #ff385c;
+            margin-left: 10px;
+        }
+        
+        .logo-icon {
+            color: #ff385c;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #ff385c;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #ff385c 0%, #e61e4d 100%);
+            color: white;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        
+        .page-header h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+        
+        .page-header p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Search and Filter Section */
+        .search-filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .search-bar {
+            display: flex;
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 50px 0 0 50px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-bar button {
+            padding: 15px 25px;
+            background: #ff385c;
+            color: white;
+            border: none;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .search-bar button:hover {
+            background: #e61e4d;
+        }
+        
+        .category-filter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category-filter select {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            background: white;
+            min-width: 200px;
+        }
+        
+        /* Messages Grid */
+        .messages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .message-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .message-header {
+            background: linear-gradient(135deg, #ff385c 0%, #e61e4d 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .message-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #fff;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff385c;
+            font-size: 32px;
+            border: 4px solid white;
+        }
+        
+        .message-field {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .message-details {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message-details h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .message-course {
+            text-align: center;
+            color: #ff385c;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        
+        .message-info {
+            margin-bottom: 15px;
+        }
+        
+        .message-info p {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .message-info i {
+            margin-right: 10px;
+            color: #ff385c;
+            width: 20px;
+        }
+        
+        .message-content {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            flex-grow: 1;
+            position: relative;
+        }
+        
+        .message-content:before {
+            content: """;
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            font-size: 60px;
+            color: #eee;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        
+        .message-content p {
+            font-style: italic;
+            color: #555;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .message-contact {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .contact-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ff385c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .contact-btn:hover {
+            background: #e61e4d;
+        }
+        
+        /* Add Message Button */
+        .add-message {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .add-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #ff385c;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .add-btn:hover {
+            background: #e61e4d;
+        }
+        
+        /* No Results Message */
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            grid-column: 1 / -1;
+            display: none;
+        }
+        
+        .no-results i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .no-results p {
+            font-size: 18px;
+            color: #777;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ff385c;
+        }
+        
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: #ff385c;
+        }
+        
+        .social-icons a {
+            display: inline-block;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+            color: #ccc;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-bar {
+                min-width: 100%;
+            }
+            
+            .category-filter {
+                width: 100%;
+            }
+            
+            .category-filter select {
+                width: 100%;
+            }
+            
+            .messages-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-comments logo-icon"></i>
+                    <h1>SHSSS Headlines</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="books_pdf.html"><i class="fas fa-book"></i> Books PDF</a></li>
+                        <li><a href="professionals.html"><i class="fas fa-user-tie"></i> Professionals</a></li>
+                        <li><a href="lost_found.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                        <li><a href="#" class="active"><i class="fas fa-comments"></i> Message Board</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h2>Community Message Board</h2>
+            <p>Connect with students and professionals through messages and announcements</p>
+        </section>
+
+        <!-- Search and Filter Section -->
+        <div class="search-filter">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search messages, names, or expertise...">
+                <button id="search-button"><i class="fas fa-search"></i> Search</button>
+            </div>
+            
+            <div class="category-filter">
+                <label for="category-select">Filter by Expertise:</label>
+                <select id="category-select">
+                    <option value="all">All Fields</option>
+                    <option value="technology">Technology</option>
+                    <option value="medicine">Medicine</option>
+                    <option value="education">Education</option>
+                    <option value="business">Business</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="science">Science</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Messages Grid -->
+        <div class="messages-grid" id="messages-container">
+            <!-- Messages will be dynamically inserted here -->
+        </div>
+        
+        <!-- No Results Message -->
+        <div class="no-results" id="no-results">
+            <i class="fas fa-search"></i>
+            <p>No messages found matching your search criteria</p>
+        </div>
+        
+        <!-- Add Message Button -->
+        <div class="add-message">
+            <button class="add-btn" id="add-message-btn"><i class="fas fa-plus"></i> Post New Message</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SHSSS Headlines</h3>
+                    <p>Connecting our community through shared messages</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#">Home</a>
+                    <a href="books_pdf.html">Books PDF</a>
+                    <a href="professionals.html">Professionals</a>
+                    <a href="lost_found.html">Lost & Found</a>
+                    <a href="#">Message Board</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> messages@shsss-headlines.edu</p>
+                    <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 SHSSS Headlines. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data (would be loaded from data.json in a real implementation)
+        const messages = [
+            {
+                name: "Dr. Sarah Johnson",
+                course: "PhD in Computer Science",
+                expertise: "technology",
+                hall: "Newton Hall",
+                message: "I'm offering tutoring sessions for students interested in machine learning. We'll cover the basics and work on practical projects. Sessions will be on Saturdays from 10 AM to 12 PM.",
+                email: "s.johnson@example.com"
+            },
+            {
+                name: "Prof. Michael Chen",
+                course: "MD in Cardiology",
+                expertise: "medicine",
+                hall: "Darwin Hall",
+                message: "I'm organizing a seminar on cardiovascular health next Thursday at 3 PM in the Medical Sciences building. All students are welcome to attend and learn about heart health prevention strategies.",
+                email: "m.chen@example.com"
+            },
+            {
+                name: "Emily Rodriguez",
+                course: "Masters in Education",
+                expertise: "education",
+                hall: "Curie Hall",
+                message: "I have extra study materials for the upcoming education certification exam. If anyone is interested, please reach out. I'm available after class in the education department lounge.",
+                email: "e.rodriguez@example.com"
+            },
+            {
+                name: "David Wilson",
+                course: "MBA in Business Administration",
+                expertise: "business",
+                hall: "Einstein Hall",
+                message: "I'm starting a business club for students interested in entrepreneurship. Our first meeting will be next Monday at 5 PM. We'll discuss startup ideas and network with local business leaders.",
+                email: "d.wilson@example.com"
+            },
+            {
+                name: "Lisa Zhang",
+                course: "MS in Civil Engineering",
+                expertise: "engineering",
+                hall: "Tesla Hall",
+                message: "I'm looking for students to collaborate on a sustainable architecture project. If you have experience with CAD software or environmental design, please contact me. This could be a great portfolio piece!",
+                email: "l.zhang@example.com"
+            },
+            {
+                name: "Marcus Brown",
+                course: "PhD in Biochemistry",
+                expertise: "science",
+                hall: "Franklin Hall",
+                message: "The science department is hosting a research fair next month. I'm available to help students with their project proposals and experimental design. Stop by my office hours on Tuesdays and Thursdays.",
+                email: "m.brown@example.com"
+            }
+        ];
+
+        // DOM elements
+        const messagesContainer = document.getElementById('messages-container');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const categorySelect = document.getElementById('category-select');
+        const noResults = document.getElementById('no-results');
+        const addMessageBtn = document.getElementById('add-message-btn');
+
+        // Display messages function
+        function displayMessages(messagesToDisplay) {
+            messagesContainer.innerHTML = '';
+            
+            if (messagesToDisplay.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            messagesToDisplay.forEach(message => {
+                const messageCard = document.createElement('div');
+                messageCard.className = 'message-card';
+                
+                // Get first letter of name for avatar
+                const firstLetter = message.name.charAt(0);
+                
+                messageCard.innerHTML = `
+                    <div class="message-header">
+                        <div class="message-avatar">
+                            ${firstLetter}
+                        </div>
+                        <h3>${message.name}</h3>
+                        <span class="message-field">${message.expertise}</span>
+                    </div>
+                    <div class="message-details">
+                        <p class="message-course">${message.course}</p>
+                        
+                        <div class="message-info">
+                            <p><i class="fas fa-building"></i> <strong>Hall:</strong> ${message.hall}</p>
+                            <p><i class="fas fa-envelope"></i> <strong>Email:</strong> ${message.email}</p>
+                        </div>
+                        
+                        <div class="message-content">
+                            <p>${message.message}</p>
+               </div>
+                        
+                        <div class="message-contact">
+                            <a href="mailto:${message.email}" class="contact-btn"><i class="fas fa-envelope"></i> Contact</a>
+                        </div>
+                    </div>
+                `;
+                messagesContainer.appendChild(messageCard);
+            });
+        }
+
+        // Filter messages based on search and category
+        function filterMessages() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const category = categorySelect.value;
+            
+            const filteredMessages = messages.filter(message => {
+                const matchesSearch = message.name.toLowerCase().includes(searchTerm) || 
+                                    message.course.toLowerCase().includes(searchTerm) ||
+                                    message.expertise.toLowerCase().includes(searchTerm) ||
+                                    message.hall.toLowerCase().includes(searchTerm) ||
+                                    message.message.toLowerCase().includes(searchTerm);
+                const matchesCategory = category === 'all' || message.expertise === category;
+                
+                return matchesSearch && matchesCategory;
+            });
+            
+            displayMessages(filteredMessages);
+        }
+
+        // Add message functionality
+        addMessageBtn.addEventListener('click', () => {
+            alert('In a real implementation, this would open a form to post a new message.\n\nThe form would collect:\n- Your name\n- Your course/degree\n- Your field of expertise\n- Your hall/residence\n- Your message\n- Your contact email');
+        });
+
+        // Event listeners
+        searchInput.addEventListener('input', filterMessages);
+        searchButton.addEventListener('click', filterMessages);
+        categorySelect.addEventListener('change', filterMessages);
+
+        // Initialize the page with all messages
+        displayMessages(messages);
+        
+        // Simulate loading from JSON file
+        console.log("This page would typically load data from a data.json file");
+        console.log("Sample data is being used for demonstration purposes");
+        
+        // Function to load from JSON (commented out for demonstration)
+        /*
+        async function loadMessages() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                messages = data.messages;
+                displayMessages(messages);
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+        
+        loadMessages();
+        */
+    </script>
+</body>
+</html>
